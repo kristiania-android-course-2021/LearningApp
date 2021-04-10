@@ -1,0 +1,120 @@
+
+Adding ViewModel,  LiveData, Coroutine into a project
+==========================
+
+Steps
+
+1.  Add dependencies in to app gradle
+
+    // Coroutines view-model and live-data.
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.4.1'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.0'
+    implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.3.0"
+    implementation "androidx.activity:activity-ktx:1.2.1"
+
+2. Add a  package viewmodel
+
+2.1 Add RecordViewModel kotlin class in the package
+
+class RecordViewModel(context: Context) : ViewModel() {
+
+}
+
+
+2.2 Add raceDao member into the class using context parameter passed in constructor
+
+class RecordViewModel(context: Context) : ViewModel()
+{
+    private var raceDao : RaceDao = RaceDatabase.get(context).getDao()
+}
+
+2.3 Add addRaceRecord in the class
+
+class RecordViewModel(context: Context) : ViewModel()
+{
+
+    private var raceDao : RaceDao = RaceDatabase.get(context).getDao()
+
+    fun addRaceRecord (entity : RecordEntity) {
+
+    }
+}
+
+2.4 Use viewModelScope.launch call for async call
+
+class RecordViewModel(context: Context) : ViewModel() {
+
+    private var raceDao : RaceDao = RaceDatabase.get(context).getDao()
+
+    fun addRaceRecord (entity : RecordEntity) {
+        viewModelScope.launch {
+
+
+        }
+    }
+}
+
+2.5 Call withContext inside call launch method and specify the execution  Dispatchers.IO
+
+class RecordViewModel(context: Context) : ViewModel() {
+
+    private var raceDao : RaceDao = RaceDatabase.get(context).getDao()
+
+    fun addRaceRecord (entity : RecordEntity) {
+        viewModelScope.launch {
+
+            withContext(Dispatchers.IO){
+
+            }
+        }
+    }
+}
+
+
+2.6 Call database inside the withContext so that call is executed in the UI Thread
+
+class RecordViewModel(context: Context) : ViewModel() {
+
+    private var raceDao : RaceDao = RaceDatabase.get(context).getDao()
+
+    fun addRaceRecord (entity : RecordEntity) {
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                //This is a call in a thread
+                raceDao.insertRecord(entity)
+            }
+        }
+    }
+}
+
+
+2.7 Now add class member of type RecordViewModel in RecordActivity and
+
+    private lateinit var viewModel : RecordViewModel
+
+
+2.8  Initialise viewModel instance in the onCreate of the RecordActivity
+
+    viewModel = RecordViewModel(this)
+
+
+3.7 Change the binding.buttonSave.setOnClickListener by replacing database call
+
+
+    binding.buttonSave.setOnClickListener {
+
+            var entity = RecordEntity (
+                binding.editName.text.toString(),
+                binding.editLength.text.toString().toInt(),
+                binding.editTime.text.toString().toInt()
+            )
+
+            //This is the non blocking way of accessing database
+            viewModel.addRaceRecord(entity)
+
+            finish()
+        }
+
+
+4. Run the app and add race records
+

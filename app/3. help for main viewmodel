@@ -1,0 +1,92 @@
+
+Adding ViewModel for MainActivity
+==========================
+
+1 Add MainViewModel kotlin class in the viewmodel package
+
+class MainViewModel(context: Context) : ViewModel() {
+
+}
+
+2.2 Add raceDao member into the class using context parameter passed in constructor
+
+class MainViewModel(context: Context) : ViewModel() {
+    private var raceDao : RaceDao = RaceDatabase.get(context).getDao()
+}
+
+2.3 Add liveRecords
+
+class MainViewModel(context: Context) : ViewModel() {
+    private var raceDao : RaceDao = RaceDatabase.get(context).getDao()
+    private var liveRecords = MutableLiveData<List<RecordEntity>>()
+}
+
+2.4 Add getRecords function that returns liveRecords
+
+class MainViewModel(context: Context) : ViewModel() {
+
+    private var raceDao : RaceDao = RaceDatabase.get(context).getDao()
+    private var liveRecords = MutableLiveData<List<RecordEntity>>()
+
+    fun getRecords (): MutableLiveData<List<RecordEntity>> {
+
+        return liveRecords
+    }
+}
+
+2.5 Now call database using DAO and change the value wrapped inside live records
+
+class MainViewModel(context: Context) : ViewModel() {
+
+    private var raceDao : RaceDao = RaceDatabase.get(context).getDao()
+    private var liveRecords = MutableLiveData<List<RecordEntity>>()
+
+    fun getRecords (): MutableLiveData<List<RecordEntity>> {
+
+        viewModelScope.launch {
+                   var result = withContext(Dispatchers.IO){
+                       raceDao.getAllRecords()
+                   }
+
+                  liveRecords.value = result // updating the value
+         }
+
+        return liveRecords
+    }
+}
+
+3.1 Goto MaiActivity class and add a member
+
+    private lateinit var viewModel : MainViewModel
+
+3.2 Create an instance of MainViewModel in onCreate of MainActivity
+
+        viewModel = MainViewModel(this)
+
+3.3 Replace onResume with following
+
+This will start observing the livedata values changes
+
+override fun onResume() {
+        super.onResume()
+
+        viewModel.getRecords().observe(this, { list->
+            list.map {entity->
+                Log.d(this.javaClass.simpleName, entity.toString())
+            }
+        })
+ }
+
+
+4. Remove .allowMainThreadQueries() from RaceDatabase builder because now we are calling it in non blocking way
+
+ val instance = Room.databaseBuilder(
+                     context.applicationContext,
+                     RaceDatabase::class.java,
+                     DB_FILENAME)
+
+                     .fallbackToDestructiveMigration()
+                     .build()
+
+
+5-- Run the app
