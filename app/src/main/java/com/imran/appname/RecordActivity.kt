@@ -27,7 +27,7 @@ class RecordActivity : AppCompatActivity() {
         binding.editName.addTextChangedListener(textWatcher)
         binding.editLength.addTextChangedListener(textWatcher)
         binding.editTime.addTextChangedListener(textWatcher)
-        
+
     }
 
 
