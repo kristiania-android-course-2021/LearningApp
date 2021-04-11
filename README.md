@@ -26,3 +26,6 @@ In this code lab we will build an android app from scratch that saves records in
 | --- | --- | --- |
 | 7. Adding MainViewModel and Observing Livedata | [https://youtu.be/TCsG0JiOmoQ](https://youtu.be/TCsG0JiOmoQ)| 25 mins |
 
+
+# For details click the link
+https://docs.google.com/document/d/1KMwdqphpyQwIAG8fRjgvztojHUKbjvXMLg2QROHRH8Y/edit?usp=sharing
