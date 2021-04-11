@@ -24,6 +24,7 @@ Steps
 
 **2. Add dependencies in app gradle**
 
+```
 def room\_version = &quot;2.2.6&quot;
 
 implementation &quot;androidx.room:room-runtime:$room\_version&quot;
@@ -31,7 +32,7 @@ implementation &quot;androidx.room:room-runtime:$room\_version&quot;
 kapt &quot;androidx.room:room-compiler:$room\_version&quot;
 
 implementation &quot;androidx.room:room-ktx:$room\_version&quot;
-
+```
 **3. Add DB Classes**
 
 =================
@@ -43,7 +44,7 @@ Create a RaceDb.kt file in it.
 **3.1 Define Table entity class in RaceDb.kt**
 
 =============================
-
+```
 @Entity
 
 data class RecordEntity(
@@ -59,11 +60,11 @@ data class RecordEntity(
 @PrimaryKey(autoGenerate = true) var priId: Int? = null
 
 }
-
+```
 **3.2 Create DAO interface in RaceDb.kt**
 
 ========================
-
+```
 @Dao
 
 interface RaceDao {
@@ -81,11 +82,11 @@ fun updateRecord(vararg item: RecordEntity)
 fun getAllRecords() : List\&lt;RecordEntity\&gt;
 
 }
-
+```
 **3.3 Abstract database class in RaceDb.kt**
 
 ===========================
-
+```
 @Database(
 
 entities = [RecordEntity::class], version = 1, exportSchema = false
@@ -143,9 +144,9 @@ return instance
 }
 
 }
-
+```
 **4. Adding record to Database from RecordActivity &amp; Crashing the app**
-
+```
 var entity = RecordEntity(
 
 binding.editName.text.toString(),
@@ -183,17 +184,17 @@ DB\_FILENAME)
 .fallbackToDestructiveMigration()
 
 .build()
-
+```
 **5. Override toString for RecordEntity class**
-
+```
 override fun toString(): String {
 
 return &quot;$name ran distance of $distance meters in $time seconds&quot;
 
 }
-
+```
 **6. override fun onResume() in MainActivity class**
-
+```
 override fun onResume() {
 
 super.onResume()
@@ -209,7 +210,7 @@ Log.d(this.javaClass.simpleName, entity.toString())
 }
 
 }
-
+```
 **7-- Run the app**
 
 | Task | Video Link | Estimated Time |
@@ -227,23 +228,23 @@ Steps
 **1. Add dependencies in to app gradle**
 
 // Coroutines view-model and live-data.
-
+```
 implementation &#39;org.jetbrains.kotlinx:kotlinx-coroutines-android:1.4.1&#39;
 
 implementation &#39;androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.0&#39;
 
 implementation &quot;androidx.lifecycle:lifecycle-livedata-ktx:2.3.0&quot;
-
+```
 **2. Add a package viewmodel**
 
 **2.1 Add RecordViewModel kotlin class in the package**
-
+```
 class RecordViewModel(context: Context) : ViewModel() {
 
 }
-
+```
 **2.2 Add raceDao member into the class using context parameter passed in constructor**
-
+```
 class RecordViewModel(context: Context) : ViewModel()
 
 {
@@ -251,9 +252,9 @@ class RecordViewModel(context: Context) : ViewModel()
 private var raceDao : RaceDao = RaceDatabase.get(context).getDao()
 
 }
-
+```
 **2.3 Add addRaceRecord in the class**
-
+```
 class RecordViewModel(context: Context) : ViewModel()
 
 {
@@ -265,9 +266,9 @@ fun addRaceRecord (entity : RecordEntity) {
 }
 
 }
-
+```
 **2.4 Use viewModelScope.launch call for async call**
-
+```
 class RecordViewModel(context: Context) : ViewModel() {
 
 private var raceDao : RaceDao = RaceDatabase.get(context).getDao()
@@ -281,9 +282,9 @@ viewModelScope.launch {
 }
 
 }
-
+```
 **2.5 Call withContext inside call launch method and specify the execution Dispatchers.IO**
-
+```
 class RecordViewModel(context: Context) : ViewModel() {
 
 private var raceDao : RaceDao = RaceDatabase.get(context).getDao()
@@ -301,9 +302,9 @@ withContext(Dispatchers.IO){
 }
 
 }
-
+```
 **2.6 Call database inside the withContext so that call is executed in the UI Thread**
-
+```
 class RecordViewModel(context: Context) : ViewModel() {
 
 private var raceDao : RaceDao = RaceDatabase.get(context).getDao()
@@ -325,17 +326,17 @@ raceDao.insertRecord(entity)
 }
 
 }
-
+```
 **2.7 Now add class member of type RecordViewModel in RecordActivity and**
-
+```
 private lateinit var viewModel : RecordViewModel
-
+```
 **2.8 Initialise viewModel instance in the onCreate of the RecordActivity**
-
+```
 viewModel = RecordViewModel(this)
-
+```
 **3.7 Change the binding.buttonSave.setOnClickListener by replacing database call**
-
+```
 binding.buttonSave.setOnClickListener {
 
 var entity = RecordEntity (
@@ -355,7 +356,7 @@ viewModel.addRaceRecord(entity)
 finish()
 
 }
-
+```
 **4. Run the app and add race records**
 
 | Task | Video Link | Estimated Time |
@@ -369,21 +370,21 @@ Following coding steps will be performed in the video link for this task.
 ==========================
 
 **1 Add MainViewModel kotlin class in the viewmodel package**
-
+```
 class MainViewModel(context: Context) : ViewModel() {
 
 }
-
+```
 **2.2 Add raceDao member into the class using context parameter passed in constructor**
-
+```
 class MainViewModel(context: Context) : ViewModel() {
 
 private var raceDao : RaceDao = RaceDatabase.get(context).getDao()
 
 }
-
+```
 **2.3 Add liveRecords**
-
+```
 class MainViewModel(context: Context) : ViewModel() {
 
 private var raceDao : RaceDao = RaceDatabase.get(context).getDao()
@@ -391,9 +392,9 @@ private var raceDao : RaceDao = RaceDatabase.get(context).getDao()
 private var liveRecords = MutableLiveData\&lt;List\&lt;RecordEntity\&gt;\&gt;()
 
 }
-
+```
 **2.4 Add getRecords function that returns liveRecords**
-
+```
 class MainViewModel(context: Context) : ViewModel() {
 
 private var raceDao : RaceDao = RaceDatabase.get(context).getDao()
@@ -407,9 +408,9 @@ return liveRecords
 }
 
 }
-
+```
 **2.5 Now call database using DAO and change the value wrapped inside live records**
-
+```
 class MainViewModel(context: Context) : ViewModel() {
 
 private var raceDao : RaceDao = RaceDatabase.get(context).getDao()
@@ -435,9 +436,9 @@ return liveRecords
 }
 
 }
-
+```
 **3.1 Goto MaiActivity class and add a member**
-
+```
 private lateinit var viewModel : MainViewModel
 
 **3.2 Create an instance of MainViewModel in onCreate of MainActivity**
@@ -463,9 +464,9 @@ Log.d(this.javaClass.simpleName, entity.toString())
 })
 
 }
-
+```
 **4. Remove .allowMainThreadQueries() from RaceDatabase builder because now we are calling it in non blocking way**
-
+```
 val instance = Room.databaseBuilder(
 
 context.applicationContext,
@@ -477,5 +478,5 @@ DB\_FILENAME)
 .fallbackToDestructiveMigration()
 
 .build()
-
+```
 **5-- Run the app**
