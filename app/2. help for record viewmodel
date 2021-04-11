@@ -1,16 +1,16 @@
 
-Adding ViewModel,  LiveData, Coroutine into a project
+Adding ViewModel, Coroutine into a project
 ==========================
 
 Steps
 
 1.  Add dependencies in to app gradle
 
-    // Coroutines view-model and live-data.
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.4.1'
-    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.0'
-    implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.3.0"
-    implementation "androidx.activity:activity-ktx:1.2.1"
+   // Coroutines view-model and live-data.
+   implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.4.1'
+   implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.0'
+   implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.3.0"
+
 
 2. Add a  package viewmodel
 
