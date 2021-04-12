@@ -19,7 +19,7 @@ class MainViewModel(context: Context) : ViewModel() {
 
     fun getRecords (): MutableLiveData<List<RecordEntity>> {
 
-         viewModelScope.launch {
+       viewModelScope.launch (Dispatchers.IO) {
              var result = withContext(Dispatchers.IO){ raceDao.getAllRecords() }
              liveRecords.value = result // updating the value
         }

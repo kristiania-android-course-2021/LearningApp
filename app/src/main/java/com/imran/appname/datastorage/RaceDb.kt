@@ -36,7 +36,7 @@ interface RaceDao {
 )
 abstract class RaceDatabase : RoomDatabase() {
 
-    //this declaration of abtract method associate DAO class with the database class RaceDatabase
+    //this declaration of abstract method associate DAO class with the database class RaceDatabase
     abstract fun getDao(): RaceDao
 
     companion object {
@@ -53,6 +53,11 @@ abstract class RaceDatabase : RoomDatabase() {
                 return tmp
             }
             synchronized(this) {
+
+                INSTANCE?.let { database->
+                    return database
+                }
+
                 val instance = Room.databaseBuilder(
                     context.applicationContext,
                     RaceDatabase::class.java,

@@ -17,13 +17,10 @@ class RecordViewModel(context: Context) : ViewModel() {
 
     fun addRaceRecord (entity : RecordEntity) {
 
-        viewModelScope.launch {
+        viewModelScope.launch (Dispatchers.IO) {
 
-            withContext(Dispatchers.IO){
+            raceDao.insertRecord(entity)
 
-                //This is a call in a thread
-                raceDao.insertRecord(entity)
-            }
         }
     }
 
